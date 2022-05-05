@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  redis1-master:
+    image: redis:6.2-alpine
+    container_name: redis-master-1
+    ports:
+      - 6379:6379
+      - 16379:16379
+    volumes:
+      - ./redis1.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  redis2-master:
+      image: redis:6.2-alpine
+      container_name: redis-master-2
+      ports:
+        - 6380:6379
+        - 16380:16379
+      volumes:
+        - ./redis2.conf:/usr/local/etc/redis/redis.conf
+      command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  redis1-slave:
+      image: redis:6.2-alpine
+      container_name: redis-slave-1
+      ports:
+        - 6381:6379
+        - 16381:16379
+      volumes:
+        - ./redis3.conf:/usr/local/etc/redis/redis.conf
+      command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  redis2-slave:
+      image: redis:6.2-alpine
+      container_name: redis-slave-2
+      ports:
+        - 6382:6379
+        - 16382:16379
+      volumes:
+        - ./redis4.conf:/usr/local/etc/redis/redis.conf
+      command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
