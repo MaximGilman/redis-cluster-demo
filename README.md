@@ -1,13 +1,31 @@
 # redis-cluster
 
-Запустить все образы
->  docker compose -f redis-main-cluster.yml up -d   
+### Запустить все образы
+>  docker compose up -d   
 
-Зайти на  мастер-ноду  и запустить bash
+#### Docker создал сеть и образы между собой доступны по имени.
+
+<br>
+
+**НО** Redis не сможет сгруппировать в кластер ноды по имени образа даже через сеть
+
+Поэтому нужно либо настроить сеть --net=host и использовать локальные порты,
+либо получить порты из созданной сети
+> docker network inspect redis-cluster-demo_default
+
+где *redis-cluster-demo_default* имя сети
+
+<br>
+
+
+### Зайти на  мастер-ноду  и запустить bash
 
 >docker exec -it redis-master-1 sh
 
-Добавить ноды в кластер. Docker создал сеть и образы между собой доступны по имени. 
+Найти IP, которые отдались образам и Добавить ноды в кластер. 
+
+> redis-cli --cluster create 192.168.0.2:6379 192.168.0.3:6379 192.168.0.4:6379 192.168.0.5:6379 192.168.0.6:6379 192.168.0.7:6379 --cluster-replicas 1
 
 Локальные порты у них одинаковые 
->redis-cli --cluster create redis-master-1:6379 redis-master-2:6379 redis-master-3:6379 redis-slave-1:6379 redis-slave-2:6379 redis-slave-3:6379 --cluster-replicas 1
+
+>redis-cli --cluster create 192.168.0.2:6379 192.168.0.3:6379 192.168.0.4:6379 192.168.0.5:6379 192.168.0.6:6379 192.168.0.7:6379 --cluster-replicas 1
