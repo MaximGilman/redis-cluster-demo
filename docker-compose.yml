@@ -11,92 +11,72 @@ services:
       - redis1-slave
       - redis2-slave
       - redis3-slave
-    networks:
-      redis_subnet:
-        ipv4_address: 172.20.0.30
-    command: redis-cli --cluster create 172.20.0.31:6379 172.20.0.32:6379 172.20.0.33:6379 172.20.0.34:6379 172.20.0.35:6379 172.20.0.36:6379 --cluster-replicas 1 --cluster-yes
+    network_mode: host
+
+    command: redis-cli --cluster create host.docker.internal:6381 host.docker.internal:6382 host.docker.internal:6383 host.docker.internal:6384 host.docker.internal:6385 host.docker.internal:6386 --cluster-replicas 1 --cluster-yes
 
   redis1-master:
     image: redis:6.2-alpine
     container_name: redis-master-1
     ports:
-      - 6381:6379
+      - 6381:6381
     volumes:
       - ./redis1.conf:/usr/local/etc/redis/redis.conf
 
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    networks:
-      redis_subnet:
-        ipv4_address: 172.20.0.31
+    network_mode: host
 
   redis2-master:
     image: redis:6.2-alpine
     container_name: redis-master-2
     ports:
-      - 6382:6379
+      - 6382:6382
     volumes:
       - ./redis2.conf:/usr/local/etc/redis/redis.conf
 
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    networks:
-      redis_subnet:
-        ipv4_address: 172.20.0.32
+    network_mode: host
 
   redis3-master:
     image: redis:6.2-alpine
     container_name: redis-master-3
     ports:
-      - 6383:6379
+      - 6383:6383
     volumes:
       - ./redis3.conf:/usr/local/etc/redis/redis.conf
 
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    networks:
-      redis_subnet:
-        ipv4_address: 172.20.0.33
+    network_mode: host
 
   redis1-slave:
     image: redis:6.2-alpine
     container_name: redis-slave-1
     ports:
-      - 6384:6379
+      - 6384:6384
     volumes:
       - ./redis4.conf:/usr/local/etc/redis/redis.conf
 
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    networks:
-      redis_subnet:
-        ipv4_address: 172.20.0.34
+    network_mode: host
 
   redis2-slave:
     image: redis:6.2-alpine
     container_name: redis-slave-2
     ports:
-      - 6385:6379
+      - 6385:6385
     volumes:
       - ./redis5.conf:/usr/local/etc/redis/redis.conf
 
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    networks:
-      redis_subnet:
-        ipv4_address: 172.20.0.35
+    network_mode: host
 
   redis3-slave:
     image: redis:6.2-alpine
     container_name: redis-slave-3
     ports:
-      - 6386:6379
+      - 6386:6386
     volumes:
       - ./redis6.conf:/usr/local/etc/redis/redis.conf
 
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    networks:
-      redis_subnet:
-        ipv4_address: 172.20.0.36
-
-networks:
-  redis_subnet:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24
+    network_mode: host
